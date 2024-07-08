@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import CommentList from "./shared/CommentList/CommentList";
+import CommentList from "./components/CommentList/CommentList";
 
 function App() {
     return (
