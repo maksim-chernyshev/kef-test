@@ -8,16 +8,7 @@ export const LoaderStyled = styled.div`
     overflow: hidden;
     background: transparent;
 
-    .spinner-rollin__inner {
-        width: 100%;
-        height: 100%;
-        position: relative;
-        transform: translateZ(0) scale(1);
-        backface-visibility: hidden;
-        transform-origin: 0 0;
-    }
-
-    .spinner-rolling__inner div {
+    .spinner {
         position: absolute;
         top: 50%;
         left: 50%;

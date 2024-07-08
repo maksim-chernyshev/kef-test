@@ -1,4 +1,4 @@
-import React, {Fragment, Suspense, useEffect, useState} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import Comment, {IAuthor, IComment} from "../Comment/Comment";
 import getCommentsRequest from "../../api/comments/getCommentsRequest";
 import getAuthorsRequest from "../../api/authors/getAuthorsRequest";
@@ -6,9 +6,9 @@ import {CommentListStyled} from "./styled";
 import {formatDate} from "../../lib/formatDate";
 import CommentListHeader from "../CommentListHeader/CommentListHeader";
 import {buildCommentTree} from "../../lib/buildCommentTree";
-import {Loader} from "../shared/Loader/Loader";
+import {Loader} from "src/shared/Loader/Loader";
 
-const CommentList = (props: any) => {
+const CommentList = () => {
     const [comments, setComments] = useState<IComment[]>([])
     const [authors, setAuthors] = useState<IAuthor[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(true)
