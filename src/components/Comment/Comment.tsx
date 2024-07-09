@@ -1,6 +1,7 @@
 import {CommentStyled} from "./styled";
 import LikeButton from "../LikeButton/LikeButton";
 import {useCallback, useState} from "react";
+import defaultUser from 'src/assets/images/default-user.jpg'
 
 export interface IComment {
     id: number;
@@ -38,11 +39,11 @@ const Comment = (props: IComment): JSX.Element => {
             <header className="comment-header">
                 <img
                     className='comment-avatar'
-                    src={authorData.avatar}
-                    alt={`Аватар ${authorData.name}`}
+                    src={authorData.avatar || defaultUser}
+                    alt={`Аватар ${authorData.name || 'Avatar not found'}`}
                 />
 
-                <div className='author-name'>{`${authorData.name} #${id}` }</div>
+                <div className='author-name'>{`${authorData.name || 'User not found'}`}</div>
 
                 <div className='comment-created'>{created}</div>
 

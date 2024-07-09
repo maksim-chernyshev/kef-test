@@ -10,6 +10,10 @@ code {
         monospace;
 }
 
+button {
+    font-family: Lato, sans-serif;
+}
+
 #root {
     width: 100%;
     min-height: 100dvh;
@@ -24,6 +28,8 @@ code {
 
 .app-wrapper {
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
     max-width: 562px;
-    padding: 0 24px;
+    padding: 0 24px 64px;
 }

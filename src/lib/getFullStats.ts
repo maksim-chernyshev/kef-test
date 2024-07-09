@@ -1,26 +1,14 @@
 import getCommentsRequest from "../api/comments/getCommentsRequest";
 import {IComment} from "../components/Comment/Comment";
 import * as pages from "../data/comments"
-
-const MAX_RETRIES = 3;
-
-const fetchWithRetry = async (pageNumber: number, retries: number = MAX_RETRIES): Promise<any> => {
-    for (let attempt = 1; attempt <= retries; attempt++) {
-        try {
-            return await getCommentsRequest(pageNumber);
-        } catch (error) {
-            console.error(`Attempt ${attempt} - Error fetching comments for page ${pageNumber}:`, error);
-            if (attempt === retries) throw error;
-        }
-    }
-};
+import {fetchWithRetry} from "./fetchWithRetry";
 
 export const getFullStats = async () => {
     let allComments = 0;
     let allLikes = 0;
-    const totalPages = Object.keys(pages);
+    const pagesCount = Object.keys(pages);
 
-    const commentRequests = totalPages.map((page) => {
+    const commentRequests = pagesCount.map((page) => {
         const pageNumber = Number(page.match(/\d+$/));
 
         return pageNumber
