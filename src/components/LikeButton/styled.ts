@@ -9,6 +9,10 @@ export const LikeButtonStyled = styled.button`
     border: none;
     background-color: transparent;
     cursor: pointer;
+
+    @media(max-width: 600px) {
+        width: 16px;
+    }
     
     img {
         display: block;

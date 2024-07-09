@@ -15,21 +15,28 @@ button {
 }
 
 #root {
+    --font-size: 16px;
     width: 100%;
     min-height: 100dvh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     background-color: #101F25;
     background-image: url('assets/images/background-desktop.webp');
     background-size: auto;
+    background-position: center top;
     background-repeat: no-repeat;
+
+    @media(max-width: 600px) {
+        --font-size: 14px;
+    }
 }
 
 .app-wrapper {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     max-width: 562px;
+    min-height: 100dvh;
+    margin: 0 auto;
     padding: 0 24px 64px;
 }

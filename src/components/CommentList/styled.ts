@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 export const CommentListStyled = styled.ul`
+    width: 100%;
     margin: 0;
     padding-left: 0;
     list-style: none;
@@ -8,6 +9,16 @@ export const CommentListStyled = styled.ul`
     ul ul,
     ul li {
         padding-left: 34px;
+
+        @media(max-width: 600px) {
+            padding-left: 0;
+        }
+    }
+
+    ul > li {
+        @media(max-width: 600px) {
+            padding-left: 20px;
+        }
     }
     
     + button {
