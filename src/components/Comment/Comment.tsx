@@ -1,22 +1,28 @@
 import {CommentStyled} from "./styled";
 import LikeButton from "src/components/LikeButton/LikeButton";
-import {useCallback, useState} from "react";
+import {memo, useCallback, useState} from "react";
 import defaultUser from 'src/assets/images/default-user.jpg'
 import {IComment} from "src/types/types";
 
 const Comment = (props: IComment): JSX.Element => {
     const {
-        id,
         created,
         text,
         likes,
         authorData
     } = props;
 
-    const [isLiked, setIsLiked] = useState(false);
+    const [isLiked, setIsLiked] = useState<boolean>(false);
+    const [commentLikes, setCommentLikes] = useState<number>(likes)
 
     const handleClick = useCallback((): void => {
         setIsLiked(() => !isLiked);
+
+        if (!isLiked) {
+            setCommentLikes((prevState) => prevState + 1)
+        } else {
+            setCommentLikes((prevState) => prevState - 1)
+        }
     }, [isLiked])
 
     return (
@@ -33,8 +39,11 @@ const Comment = (props: IComment): JSX.Element => {
                 <div className='comment-created'>{created}</div>
 
                 <div className='comment-likes'>
-                    <LikeButton onClick={handleClick} isLiked={isLiked} />
-                    <span className='likes-counter'>{likes}</span>
+                    <LikeButton
+                        onClick={handleClick}
+                        isLiked={isLiked}
+                    />
+                    <span className='likes-counter'>{commentLikes}</span>
                 </div>
             </header>
 
@@ -43,4 +52,4 @@ const Comment = (props: IComment): JSX.Element => {
     )
 }
 
-export default Comment;
+export default memo(Comment);

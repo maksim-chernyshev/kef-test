@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useState} from "react";
+import React, {Fragment, useCallback, useEffect, useMemo, useState} from "react";
 import Comment from "../Comment/Comment";
 import getCommentsRequest from "src/api/comments/getCommentsRequest";
 import getAuthorsRequest from "src/api/authors/getAuthorsRequest";
@@ -18,7 +18,7 @@ const CommentList = () => {
     const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false)
     const pagesCount = Object.keys(pages).length;
 
-    const fetchData = async (page: number) => {
+    const fetchData = useCallback( async(page: number) => {
         for (let attempt = 1; attempt <= 3; attempt++) {
             try {
                 const commentsData = await getCommentsRequest(page);
@@ -41,13 +41,13 @@ const CommentList = () => {
                 setIsLoadingMore(false);
             }
         }
-    };
+    }, [authors.length]);
 
     useEffect(() => {
         fetchData(currentPage);
-    }, [currentPage]);
+    }, [currentPage, fetchData]);
 
-    const renderCommentTree = (
+    const renderCommentTree = useCallback((
         commentTree: Record<number, IComment[]>,
         parentId: number = 0
     ): JSX.Element[] => {
@@ -76,14 +76,16 @@ const CommentList = () => {
                 )}
             </Fragment>
         ));
-    };
+    }, [authors]);
 
-    const handleMoreComments = () => {
+    const handleMoreComments = useCallback(() => {
         setIsLoadingMore(true);
         setCurrentPage(prevState => prevState + 1);
-    }
+    },[]);
 
-    const commentTreesByPage = Object.values(commentsByPage).map(comments => buildCommentTree(comments));
+    const commentTreesByPage = useMemo(() =>
+            Object.values(commentsByPage).map(comments => buildCommentTree(comments))
+    , [commentsByPage]);
 
     if (isLoading) {
         return <Loader/>

@@ -4,7 +4,7 @@ import {declensionComments} from "src/lib/declensionComments";
 import {CommentListHeaderStyled} from "./styled";
 import allLikesImg from 'src/assets/images/like-gray-filled.png'
 
-const CommentListHeader = (props: any) => {
+const CommentListHeader = () => {
     const [allComments, setAllComments] = useState<number>(0)
     const [allLikes, setAllLikes] = useState<number>(0)
     const [isLoading, setIsLoading] = useState<boolean>(true)
