@@ -1,23 +1,8 @@
 import {CommentStyled} from "./styled";
-import LikeButton from "../LikeButton/LikeButton";
+import LikeButton from "src/components/LikeButton/LikeButton";
 import {useCallback, useState} from "react";
 import defaultUser from 'src/assets/images/default-user.jpg'
-
-export interface IComment {
-    id: number;
-    created: string;
-    text: string;
-    author: number;
-    parent: number | null;
-    likes: number;
-    authorData: IAuthor;
-}
-
-export interface IAuthor {
-    id: number;
-    name: string;
-    avatar: string;
-}
+import {IComment} from "src/types/types";
 
 const Comment = (props: IComment): JSX.Element => {
     const {

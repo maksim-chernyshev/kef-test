@@ -1,4 +1,4 @@
-import getCommentsRequest from "../api/comments/getCommentsRequest";
+import getCommentsRequest from "src/api/comments/getCommentsRequest";
 
 const MAX_RETRIES = 3;
 

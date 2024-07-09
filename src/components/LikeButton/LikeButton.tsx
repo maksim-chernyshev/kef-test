@@ -1,5 +1,5 @@
-import liked from '../../assets/images/like-red-filled.png'
-import notLiked from '../../assets/images/like-red-unfilled.png'
+import liked from 'src/assets/images/like-red-filled.png'
+import notLiked from 'src/assets/images/like-red-unfilled.png'
 import {LikeButtonStyled} from "./styled";
 
 const LikeButton = (props: any) => {

@@ -1,7 +1,6 @@
-import getCommentsRequest from "../api/comments/getCommentsRequest";
-import {IComment} from "../components/Comment/Comment";
-import * as pages from "../data/comments"
+import * as pages from "src/data/comments"
 import {fetchWithRetry} from "./fetchWithRetry";
+import {IComment} from "src/types/types";
 
 export const getFullStats = async () => {
     let allComments = 0;

@@ -1,13 +1,14 @@
 import React, {Fragment, useEffect, useState} from "react";
-import Comment, {IAuthor, IComment} from "../Comment/Comment";
-import getCommentsRequest from "../../api/comments/getCommentsRequest";
-import getAuthorsRequest from "../../api/authors/getAuthorsRequest";
+import Comment from "../Comment/Comment";
+import getCommentsRequest from "src/api/comments/getCommentsRequest";
+import getAuthorsRequest from "src/api/authors/getAuthorsRequest";
 import {CommentListStyled} from "./styled";
-import {formatDate} from "../../lib/formatDate";
+import {formatDate} from "src/lib/formatDate";
 import CommentListHeader from "../CommentListHeader/CommentListHeader";
-import {buildCommentTree} from "../../lib/buildCommentTree";
+import {buildCommentTree} from "src/lib/buildCommentTree";
 import {Loader} from "src/shared/Loader/Loader";
 import * as pages from "src/data/comments"
+import {IAuthor, IComment} from "src/types/types";
 
 const CommentList = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);

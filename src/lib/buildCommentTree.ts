@@ -1,4 +1,4 @@
-import {IComment} from "../components/Comment/Comment";
+import {IComment} from "src/types/types";
 
 type CommentTreeType = Record<number, IComment[]>
 
