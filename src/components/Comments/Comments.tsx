@@ -66,11 +66,11 @@ const Comments = () => {
     useEffect(() => {
         getCommentsStats(totalPages)
             .then((fullStats) => {
+                setIsStatsLoading((prevState) => !prevState);
                 setStats({
                     comments: fullStats.comments,
                     likes: fullStats.likes,
                 });
-                setIsStatsLoading((prevState) => !prevState);
             })
             .catch(() => setError(true));
 
