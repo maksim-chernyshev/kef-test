@@ -1,10 +1,9 @@
-import {memo} from "react";
+import {memo, useState} from "react";
 import {declensionComments} from "src/lib/declensionComments";
 import {CommentHeaderStyled} from "./styled";
 import allLikesImg from "src/assets/images/like-gray-filled.png";
 
 interface ICommentsHeaderProps {
-    isLoading: boolean;
     stats: {
         comments: number;
         likes: number;
@@ -12,7 +11,9 @@ interface ICommentsHeaderProps {
     isError: boolean;
 }
 
-const CommentsHeader = ({stats, isLoading, isError}: ICommentsHeaderProps) => {
+const CommentsHeader = ({stats, isError}: ICommentsHeaderProps) => {
+    const isLoading = !stats.comments && !stats.likes;
+
     return (
         <CommentHeaderStyled>
             <div className="comments">

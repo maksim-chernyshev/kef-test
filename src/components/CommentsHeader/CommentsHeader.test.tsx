@@ -23,11 +23,7 @@ describe("Получение статистики", () => {
 
     test("Рендер текста загрузки", async () => {
         render(
-            <CommentsHeader
-                stats={{comments: 0, likes: 0}}
-                isLoading={true}
-                isError={false}
-            />,
+            <CommentsHeader stats={{comments: 0, likes: 0}} isError={false} />,
         );
 
         expect(screen.getByText("Загрузка...")).toBeInTheDocument();
@@ -35,11 +31,7 @@ describe("Получение статистики", () => {
 
     test("Рендер компонента с данными", async () => {
         render(
-            <CommentsHeader
-                stats={{comments: 2, likes: 3}}
-                isLoading={false}
-                isError={false}
-            />,
+            <CommentsHeader stats={{comments: 2, likes: 3}} isError={false} />,
         );
 
         await waitFor(() =>
@@ -54,11 +46,7 @@ describe("Получение статистики", () => {
         );
 
         render(
-            <CommentsHeader
-                stats={{comments: 0, likes: 0}}
-                isLoading={false}
-                isError={true}
-            />,
+            <CommentsHeader stats={{comments: 0, likes: 0}} isError={true} />,
         );
 
         await waitFor(() =>

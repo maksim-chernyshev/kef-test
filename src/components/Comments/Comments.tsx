@@ -30,12 +30,11 @@ const Comments = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
     const [totalPages, setTotalPages] = useState(0);
+    const [error, setError] = useState(false);
     const [stats, setStats] = useState<IStats>({
         comments: 0,
         likes: 0,
     });
-    const [error, setError] = useState(false);
-    const [isStatsLoading, setIsStatsLoading] = useState(true);
 
     const fetchData = useCallback(
         async (page: number) => {
@@ -66,11 +65,10 @@ const Comments = () => {
     useEffect(() => {
         getCommentsStats(totalPages)
             .then((fullStats) => {
-                setIsStatsLoading((prevState) => !prevState);
-                setStats({
+                setStats(() => ({
                     comments: fullStats.comments,
                     likes: fullStats.likes,
-                });
+                }));
             })
             .catch(() => setError(true));
 
@@ -142,11 +140,7 @@ const Comments = () => {
 
     return (
         <>
-            <CommentsHeader
-                stats={stats}
-                isLoading={isStatsLoading}
-                isError={error}
-            />
+            <CommentsHeader stats={stats} isError={error} />
 
             {commentTreesByPage.map((commentTree, index) => (
                 <CommentsStyled key={index}>
