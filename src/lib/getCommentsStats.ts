@@ -11,24 +11,28 @@ export const getCommentsStats = async (pagesCount: number): Promise<ICommentsSta
     let likes = 0;
     const pagesArray: number[] = [];
 
-    for (let i = 0; i < pagesCount; i++) {
+    for (let i = 1; i <= pagesCount; i++) {
         pagesArray.push(i);
     }
 
-    const commentRequests = pagesArray.map((page) => {
+    const commentRequests = pagesArray.map(page => {
         return page
             ? fetchWithRetry(page)
             : null;
     });
 
-    const pagesData = await Promise.all(commentRequests);
+    try {
+        const pagesData = await Promise.all(commentRequests);
 
-    pagesData.forEach((page) => {
-        if (page) {
-            comments += page.data.length;
-            likes += page.data.reduce((sum: number, comment: IComment) => sum + comment.likes, 0);
-        }
-    });
+        pagesData.forEach((page) => {
+            if (page) {
+                comments += page.data.length;
+                likes += page.data.reduce((sum: number, comment: IComment) => sum + comment.likes, 0);
+            }
+        });
+    } catch (error) {
+        throw new Error((error as Error).message)
+    }
 
     return {
         comments,

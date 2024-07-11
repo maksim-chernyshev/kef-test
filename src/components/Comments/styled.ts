@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
 export const CommentsStyled = styled.ul`
-    width: 100%;
     margin: 0;
     padding-left: 0;
     list-style: none;

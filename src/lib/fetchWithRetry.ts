@@ -1,7 +1,7 @@
 import getCommentsRequest from "src/api/comments/getCommentsRequest";
 import {ICommentsPage} from "../types/types";
 
-const MAX_RETRIES = 3;
+const MAX_RETRIES: number = 3;
 
 export const fetchWithRetry = async (
     pageNumber: number,
