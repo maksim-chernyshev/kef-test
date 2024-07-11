@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.7fab1718.css",
-    "main.js": "/static/js/main.932ffacf.js",
-    "static/media/background-desktop.webp": "/static/media/background-desktop.51dda55826a40a00fa64.webp",
-    "static/media/han-solo.jpg": "/static/media/han-solo.84705bac66e252072c67.jpg",
-    "index.html": "/index.html",
-    "main.7fab1718.css.map": "/static/css/main.7fab1718.css.map",
-    "main.932ffacf.js.map": "/static/js/main.932ffacf.js.map"
+    "main.css": "/kef-test/static/css/main.d50097f3.css",
+    "main.js": "/kef-test/static/js/main.cfb52c65.js",
+    "static/media/background-desktop.webp": "/kef-test/static/media/background-desktop.51dda55826a40a00fa64.webp",
+    "static/media/han-solo.jpg": "/kef-test/static/media/han-solo.84705bac66e252072c67.jpg",
+    "index.html": "/kef-test/index.html",
+    "main.d50097f3.css.map": "/kef-test/static/css/main.d50097f3.css.map",
+    "main.cfb52c65.js.map": "/kef-test/static/js/main.cfb52c65.js.map"
   },
   "entrypoints": [
-    "static/css/main.7fab1718.css",
-    "static/js/main.932ffacf.js"
+    "static/css/main.d50097f3.css",
+    "static/js/main.cfb52c65.js"
   ]
 }
