@@ -13,7 +13,7 @@ const LikeButton = (props: LikeButtonProps) => {
 
     return (
         <LikeButtonStyled onClick={onClick}>
-            <img src={isLiked ? liked : notLiked} alt={isLiked ? 'Поставить лайк' : 'Снять лайк'}  />
+            <img src={isLiked ? liked : notLiked} alt={isLiked ? 'Снять лайк' : 'Поставить лайк'}  />
         </LikeButtonStyled>
     )
 }

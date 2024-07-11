@@ -19,6 +19,6 @@ export interface IComment {
 
 export interface IAuthor {
     id: number;
-    name: string;
-    avatar: string;
+    name?: string;
+    avatar?: string;
 }

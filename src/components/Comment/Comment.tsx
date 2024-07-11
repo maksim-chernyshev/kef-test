@@ -31,10 +31,10 @@ const Comment = (props: IComment): JSX.Element => {
                 <img
                     className='comment-avatar'
                     src={authorData.avatar || defaultUser}
-                    alt={`Аватар ${authorData.name || 'Avatar not found'}`}
+                    alt={`Аватар ${authorData.name || 'пользователя не найден'}`}
                 />
 
-                <div className='author-name'>{`${authorData.name || 'User not found'}`}</div>
+                <div className='author-name'>{`${authorData.name || 'Пользователь не найден'}`}</div>
 
                 <div className='comment-created'>{created}</div>
 

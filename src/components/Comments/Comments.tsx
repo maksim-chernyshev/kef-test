@@ -12,10 +12,10 @@ import {IAuthor, IComment, ICommentsPage} from "src/types/types";
 const Comments = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [commentsByPage, setCommentsByPage] = useState<Record<number, IComment[]>>({});
-    const [authors, setAuthors] = useState<IAuthor[]>([])
-    const [isLoading, setIsLoading] = useState(true)
-    const [isLoadingMore, setIsLoadingMore] = useState(false)
-    const [totalPages, setTotalPages] = useState(0)
+    const [authors, setAuthors] = useState<IAuthor[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
+    const [totalPages, setTotalPages] = useState(0);
 
     const fetchData = useCallback( async(page: number) => {
         try {
