@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 export const CommentHeaderStyled = styled.header`
     display: flex;
@@ -10,7 +10,7 @@ export const CommentHeaderStyled = styled.header`
     border-bottom: 1px solid #767676;
     color: #ffffff;
 
-    @media(max-width: 600px) {
+    @media (max-width: 600px) {
         margin: 32px 0 24px;
     }
 
@@ -19,7 +19,7 @@ export const CommentHeaderStyled = styled.header`
         line-height: 22px;
         font-weight: 700;
     }
-    
+
     .comment-list-likes {
         display: grid;
         grid-auto-flow: column;
@@ -29,7 +29,7 @@ export const CommentHeaderStyled = styled.header`
         line-height: 1.5;
         font-weight: 700;
 
-        @media(max-width: 600px) {
+        @media (max-width: 600px) {
             font-size: var(--font-size);
         }
 
@@ -38,9 +38,9 @@ export const CommentHeaderStyled = styled.header`
             width: 18px;
             pointer-events: none;
 
-            @media(max-width: 600px) {
+            @media (max-width: 600px) {
                 width: 16px;
             }
         }
     }
-`
+`;

@@ -1,11 +1,11 @@
 import {IComment} from "src/types/types";
 
-type CommentTreeType = Record<number, IComment[]>
+type CommentTreeType = Record<number, IComment[]>;
 
 export const buildCommentTree = (comments: IComment[]): CommentTreeType => {
     const commentTree: CommentTreeType = {};
 
-    comments.forEach(comment => {
+    comments.forEach((comment) => {
         const parentId = comment.parent ?? 0;
 
         if (!commentTree[parentId]) {

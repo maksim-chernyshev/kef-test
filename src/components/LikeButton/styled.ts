@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 export const LikeButtonStyled = styled.button`
     display: flex;
@@ -10,13 +10,13 @@ export const LikeButtonStyled = styled.button`
     background-color: transparent;
     cursor: pointer;
 
-    @media(max-width: 600px) {
+    @media (max-width: 600px) {
         width: 16px;
     }
-    
+
     img {
         display: block;
         width: 100%;
         pointer-events: none;
     }
-`
+`;

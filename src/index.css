@@ -18,13 +18,13 @@ button {
     --font-size: 16px;
     width: 100%;
     min-height: 100dvh;
-    background-color: #101F25;
-    background-image: url('assets/images/background-desktop.webp');
+    background-color: #101f25;
+    background-image: url("assets/images/background-desktop.webp");
     background-size: auto;
     background-position: center top;
     background-repeat: no-repeat;
 
-    @media(max-width: 600px) {
+    @media (max-width: 600px) {
         --font-size: 14px;
     }
 }

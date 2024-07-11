@@ -11,4 +11,4 @@ export const declensionComments = (count: number) => {
     } else {
         return `${count} комментариев`;
     }
-}
+};

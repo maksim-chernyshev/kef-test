@@ -1,25 +1,25 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 export const CommentsStyled = styled.ul`
     margin: 0;
     padding-left: 0;
     list-style: none;
-    
+
     ul ul,
     ul li {
         padding-left: 34px;
 
-        @media(max-width: 600px) {
+        @media (max-width: 600px) {
             padding-left: 0;
         }
     }
 
     ul > li {
-        @media(max-width: 600px) {
+        @media (max-width: 600px) {
             padding-left: 20px;
         }
     }
-    
+
     + button {
         width: max-content;
         margin: 0 auto;
@@ -27,10 +27,10 @@ export const CommentsStyled = styled.ul`
         border: none;
         font-size: 16px;
         line-height: 22px;
-        color: #FFFFFF;
+        color: #ffffff;
         background-color: #313439;
         cursor: pointer;
-        
+
         &:hover {
             background-color: #767676;
         }

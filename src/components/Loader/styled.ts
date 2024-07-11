@@ -14,7 +14,7 @@ export const LoaderStyled = styled.div`
         left: 50%;
         width: 80px;
         height: 80px;
-        border: 20px solid #FFFFFF;
+        border: 20px solid #ffffff;
         border-top-color: transparent;
         border-radius: 50%;
         animation: rollin 1s linear infinite;
@@ -22,8 +22,11 @@ export const LoaderStyled = styled.div`
     }
 
     @keyframes rollin {
-        0% { transform: translate(-50%, -50%) rotate(0deg); }
-        100% { transform: translate(-50%, -50%) rotate(360deg); }
+        0% {
+            transform: translate(-50%, -50%) rotate(0deg);
+        }
+        100% {
+            transform: translate(-50%, -50%) rotate(360deg);
+        }
     }
-
-`
+`;
