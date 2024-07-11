@@ -1,10 +1,10 @@
 import React from "react";
-import CommentList from "./components/CommentList/CommentList";
+import Comments from "src/components/Comments/Comments";
 
 function App() {
     return (
         <div className='app-wrapper'>
-            <CommentList/>
+            <Comments/>
         </div>
     )
 }

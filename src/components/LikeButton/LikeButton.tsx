@@ -1,8 +1,14 @@
 import liked from 'src/assets/images/like-red-filled.png'
 import notLiked from 'src/assets/images/like-red-unfilled.png'
 import {LikeButtonStyled} from "./styled";
+import {memo} from "react";
 
-const LikeButton = (props: any) => {
+interface LikeButtonProps {
+    isLiked: boolean,
+    onClick: () => void
+}
+
+const LikeButton = (props: LikeButtonProps) => {
     const {isLiked, onClick} = props;
 
     return (
@@ -12,4 +18,4 @@ const LikeButton = (props: any) => {
     )
 }
 
-export default LikeButton;
+export default memo(LikeButton);

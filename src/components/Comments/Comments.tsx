@@ -2,44 +2,43 @@ import React, {Fragment, useCallback, useEffect, useMemo, useState} from "react"
 import Comment from "../Comment/Comment";
 import getCommentsRequest from "src/api/comments/getCommentsRequest";
 import getAuthorsRequest from "src/api/authors/getAuthorsRequest";
-import {CommentListStyled} from "./styled";
+import {CommentsStyled} from "./styled";
 import {formatDate} from "src/lib/formatDate";
-import CommentListHeader from "../CommentListHeader/CommentListHeader";
+import CommentsHeader from "../CommentsHeader/CommentsHeader";
 import {buildCommentTree} from "src/lib/buildCommentTree";
-import {Loader} from "src/shared/Loader/Loader";
-import * as pages from "src/data/comments"
-import {IAuthor, IComment} from "src/types/types";
+import {Loader} from "src/components/Loader/Loader";
+import {IAuthor, IComment, ICommentsPage} from "src/types/types";
 
-const CommentList = () => {
-    const [currentPage, setCurrentPage] = useState<number>(1);
+const Comments = () => {
+    const [currentPage, setCurrentPage] = useState(1);
     const [commentsByPage, setCommentsByPage] = useState<Record<number, IComment[]>>({});
     const [authors, setAuthors] = useState<IAuthor[]>([])
-    const [isLoading, setIsLoading] = useState<boolean>(true)
-    const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false)
-    const pagesCount = Object.keys(pages).length;
+    const [isLoading, setIsLoading] = useState(true)
+    const [isLoadingMore, setIsLoadingMore] = useState(false)
+    const [totalPages, setTotalPages] = useState(0)
 
     const fetchData = useCallback( async(page: number) => {
-        for (let attempt = 1; attempt <= 3; attempt++) {
-            try {
-                const commentsData = await getCommentsRequest(page);
+        try {
+            await getCommentsRequest(page)
+                .then((pageData: ICommentsPage) => {
+                    setTotalPages(pageData.pagination.total_pages)
+                    setCommentsByPage(prevCommentsByPage => ({
+                        ...prevCommentsByPage,
+                        [page]: pageData.data
+                    }));
+                });
 
-                setCommentsByPage(prevCommentsByPage => ({
-                    ...prevCommentsByPage,
-                    [page]: commentsData.data
-                }));
-
-                if (authors.length === 0) {
-                    const authorsData = await getAuthorsRequest();
-                    setAuthors(authorsData);
-                }
-
-                setIsLoading(false);
-                setIsLoadingMore(false);
-            } catch (error) {
-                console.error("Error fetching data: ", error);
-                setIsLoading(false);
-                setIsLoadingMore(false);
+            if (authors.length === 0) {
+                await getAuthorsRequest()
+                    .then((authorsData: IAuthor[]) => setAuthors(authorsData));
             }
+
+            setIsLoading(false);
+            setIsLoadingMore(false);
+        } catch (error) {
+            console.error("Error fetching data: ", error);
+            setIsLoading(false);
+            setIsLoadingMore(false);
         }
     }, [authors.length]);
 
@@ -70,9 +69,9 @@ const CommentList = () => {
                 />
 
                 {commentTree[comment.id] && (
-                    <CommentListStyled>
+                    <CommentsStyled>
                         {renderCommentTree(commentTree, comment.id)}
-                    </CommentListStyled>
+                    </CommentsStyled>
                 )}
             </Fragment>
         ));
@@ -93,22 +92,22 @@ const CommentList = () => {
 
     return (
         <>
-            <CommentListHeader/>
+            <CommentsHeader pages={totalPages}/>
+
             {commentTreesByPage.map((commentTree, index) => (
-                <CommentListStyled key={index}>
+                <CommentsStyled key={index}>
                     {renderCommentTree(commentTree)}
-                </CommentListStyled>
+                </CommentsStyled>
             ))}
 
-
-            {(currentPage < pagesCount) && <button
+            {(currentPage < totalPages) && <button
                 type='button'
                 onClick={handleMoreComments}
             >
-                { isLoadingMore ? '...Loading' : 'More comments'}
+                { isLoadingMore ? 'Загрузка...' : 'Загрузить еще'}
             </button>}
         </>
     );
 }
 
-export default CommentList;
+export default Comments;

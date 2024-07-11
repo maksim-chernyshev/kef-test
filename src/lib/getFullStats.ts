@@ -1,31 +1,37 @@
-import * as pages from "src/data/comments"
 import {fetchWithRetry} from "./fetchWithRetry";
 import {IComment} from "src/types/types";
 
-export const getFullStats = async () => {
-    let allComments = 0;
-    let allLikes = 0;
-    const pagesCount = Object.keys(pages);
+interface ICommentsStats {
+    comments: number,
+    likes: number
+}
 
-    const commentRequests = pagesCount.map((page) => {
-        const pageNumber = Number(page.match(/\d+$/));
+export const getCommentsStats = async (pagesCount: number): Promise<ICommentsStats> => {
+    let comments = 0;
+    let likes = 0;
+    const pagesArray: number[] = [];
 
-        return pageNumber
-            ? fetchWithRetry(pageNumber)
+    for (let i = 0; i < pagesCount; i++) {
+        pagesArray.push(i);
+    }
+
+    const commentRequests = pagesArray.map((page) => {
+        return page
+            ? fetchWithRetry(page)
             : null;
     });
 
-    const responses = await Promise.all(commentRequests);
+    const pagesData = await Promise.all(commentRequests);
 
-    responses.forEach((item) => {
-        if (item) {
-            allComments += item.data.length;
-            allLikes += item.data.reduce((sum: number, comment: IComment) => sum + comment.likes, 0);
+    pagesData.forEach((page) => {
+        if (page) {
+            comments += page.data.length;
+            likes += page.data.reduce((sum: number, comment: IComment) => sum + comment.likes, 0);
         }
     });
 
     return {
-        allComments,
-        allLikes
+        comments,
+        likes
     };
 };

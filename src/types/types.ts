@@ -1,3 +1,12 @@
+export interface ICommentsPage{
+    pagination: {
+        page: number,
+        size: number,
+        total_pages: number,
+    },
+    data: IComment[]
+}
+
 export interface IComment {
     id: number;
     created: string;
