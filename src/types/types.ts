@@ -15,6 +15,7 @@ export interface IComment {
     parent: number | null;
     likes: number;
     authorData: IAuthor;
+    updateLikes: (increment: boolean) => void;
 }
 
 export interface IAuthor {

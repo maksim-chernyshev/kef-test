@@ -14,6 +14,12 @@ import CommentsHeader from "../CommentsHeader/CommentsHeader";
 import {buildCommentTree} from "src/lib/buildCommentTree";
 import {Loader} from "src/components/Loader/Loader";
 import {IAuthor, IComment, ICommentsPage} from "src/types/types";
+import {getCommentsStats} from "../../lib/getCommentsStats";
+
+interface IStats {
+    comments: number;
+    likes: number;
+}
 
 const Comments = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -24,24 +30,26 @@ const Comments = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
     const [totalPages, setTotalPages] = useState(0);
+    const [stats, setStats] = useState<IStats>({
+        comments: 0,
+        likes: 0,
+    });
+    const [error, setError] = useState(false);
+    const [isStatsLoading, setIsStatsLoading] = useState(true);
 
     const fetchData = useCallback(
         async (page: number) => {
             try {
-                await getCommentsRequest(page).then(
-                    (pageData: ICommentsPage) => {
-                        setTotalPages(pageData.pagination.total_pages);
-                        setCommentsByPage((prevCommentsByPage) => ({
-                            ...prevCommentsByPage,
-                            [page]: pageData.data,
-                        }));
-                    },
-                );
+                const pageData: ICommentsPage = await getCommentsRequest(page);
+                setTotalPages(pageData.pagination.total_pages);
+                setCommentsByPage((prevCommentsByPage) => ({
+                    ...prevCommentsByPage,
+                    [page]: pageData.data,
+                }));
 
                 if (authors.length === 0) {
-                    await getAuthorsRequest().then((authorsData: IAuthor[]) =>
-                        setAuthors(authorsData),
-                    );
+                    const authorsData: IAuthor[] = await getAuthorsRequest();
+                    setAuthors(authorsData);
                 }
 
                 setIsLoading(false);
@@ -56,8 +64,25 @@ const Comments = () => {
     );
 
     useEffect(() => {
+        getCommentsStats(totalPages)
+            .then((fullStats) => {
+                setStats({
+                    comments: fullStats.comments,
+                    likes: fullStats.likes,
+                });
+                setIsStatsLoading((prevState) => !prevState);
+            })
+            .catch(() => setError(true));
+
         fetchData(currentPage);
     }, [currentPage, fetchData]);
+
+    const handleUpdateLikes = (increment: boolean) => {
+        setStats((state) => ({
+            ...state,
+            likes: increment ? state.likes + 1 : state.likes - 1,
+        }));
+    };
 
     const renderCommentTree = useCallback(
         (
@@ -84,6 +109,7 @@ const Comments = () => {
                         parent={comment.parent}
                         likes={comment.likes}
                         authorData={authors[comment.author - 1]}
+                        updateLikes={handleUpdateLikes}
                     />
 
                     {commentTree[comment.id] && (
@@ -99,7 +125,7 @@ const Comments = () => {
 
     const handleMoreComments = useCallback(() => {
         setIsLoadingMore(true);
-        setCurrentPage((prevState) => prevState + 1);
+        setCurrentPage((prevPage) => prevPage + 1);
     }, []);
 
     const commentTreesByPage = useMemo(
@@ -116,7 +142,11 @@ const Comments = () => {
 
     return (
         <>
-            <CommentsHeader pages={totalPages} />
+            <CommentsHeader
+                stats={stats}
+                isLoading={isStatsLoading}
+                isError={error}
+            />
 
             {commentTreesByPage.map((commentTree, index) => (
                 <CommentsStyled key={index}>
@@ -125,7 +155,11 @@ const Comments = () => {
             ))}
 
             {currentPage < totalPages && (
-                <button type="button" onClick={handleMoreComments}>
+                <button
+                    type="button"
+                    onClick={handleMoreComments}
+                    disabled={isLoadingMore}
+                >
                     {isLoadingMore ? "Загрузка..." : "Загрузить еще"}
                 </button>
             )}

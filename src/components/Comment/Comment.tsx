@@ -1,24 +1,27 @@
 import {CommentStyled} from "./styled";
-import LikeButton from "src/components/LikeButton/LikeButton";
 import {memo, useCallback, useState} from "react";
 import defaultUser from "src/assets/images/default-user.jpg";
 import {IComment} from "src/types/types";
+import liked from "src/assets/images/like-red-filled.png";
+import notLiked from "src/assets/images/like-red-unfilled.png";
 
 const Comment = (props: IComment): JSX.Element => {
-    const {created, text, likes, authorData} = props;
+    const {created, text, likes, authorData, updateLikes} = props;
 
-    const [isLiked, setIsLiked] = useState<boolean>(false);
-    const [commentLikes, setCommentLikes] = useState<number>(likes);
+    const [isLiked, setIsLiked] = useState(false);
+    const [commentLikes, setCommentLikes] = useState(likes);
 
     const handleClick = useCallback((): void => {
         setIsLiked(() => !isLiked);
 
         if (!isLiked) {
             setCommentLikes((prevState) => prevState + 1);
+            updateLikes(true);
         } else {
             setCommentLikes((prevState) => prevState - 1);
+            updateLikes(false);
         }
-    }, [isLiked]);
+    }, [isLiked, updateLikes]);
 
     return (
         <CommentStyled>
@@ -38,7 +41,12 @@ const Comment = (props: IComment): JSX.Element => {
                 <div className="comment-created">{created}</div>
 
                 <div className="comment-likes">
-                    <LikeButton onClick={handleClick} isLiked={isLiked} />
+                    <button className="like-button" onClick={handleClick}>
+                        <img
+                            src={isLiked ? liked : notLiked}
+                            alt={isLiked ? "Снять лайк" : "Поставить лайк"}
+                        />
+                    </button>
                     <span className="likes-counter">{commentLikes}</span>
                 </div>
             </header>

@@ -60,6 +60,27 @@ export const CommentStyled = styled.li`
         gap: 8px;
     }
 
+    .like-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 18px;
+        padding: 0;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+
+        @media (max-width: 600px) {
+            width: 16px;
+        }
+
+        img {
+            display: block;
+            width: 100%;
+            pointer-events: none;
+        }
+    }
+
     .likes-counter {
         font-size: 15px;
         line-height: 1.5;

@@ -16,6 +16,7 @@ const commentData = {
         name: "John Doe",
         avatar: "author-avatar-url",
     },
+    updateLikes: () => {},
 };
 
 describe("Comment", () => {
@@ -76,6 +77,7 @@ describe("Comment", () => {
                 name: undefined,
                 avatar: undefined,
             },
+            updateLikes: () => {},
         };
 
         const {getByAltText, getByText} = render(<Comment {...commentData} />);

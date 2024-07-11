@@ -1,4 +1,4 @@
-import {getCommentsStats} from "../../lib/getCommentsStats";
+import {getCommentsStats} from "src/lib/getCommentsStats";
 import {render, screen, waitFor} from "@testing-library/react";
 import CommentsHeader from "./CommentsHeader";
 
@@ -22,23 +22,25 @@ describe("Получение статистики", () => {
     });
 
     test("Рендер текста загрузки", async () => {
-        (getCommentsStats as jest.Mock).mockResolvedValue({
-            comments: 0,
-            likes: 0,
-        });
-
-        render(<CommentsHeader pages={1} />);
+        render(
+            <CommentsHeader
+                stats={{comments: 0, likes: 0}}
+                isLoading={true}
+                isError={false}
+            />,
+        );
 
         expect(screen.getByText("Загрузка...")).toBeInTheDocument();
     });
 
     test("Рендер компонента с данными", async () => {
-        (getCommentsStats as jest.Mock).mockResolvedValue({
-            comments: 2,
-            likes: 3,
-        });
-
-        render(<CommentsHeader pages={1} />);
+        render(
+            <CommentsHeader
+                stats={{comments: 2, likes: 3}}
+                isLoading={false}
+                isError={false}
+            />,
+        );
 
         await waitFor(() =>
             expect(screen.getByText("2 комментария")).toBeInTheDocument(),
@@ -51,7 +53,13 @@ describe("Получение статистики", () => {
             new Error("Failed to fetch"),
         );
 
-        render(<CommentsHeader pages={1} />);
+        render(
+            <CommentsHeader
+                stats={{comments: 0, likes: 0}}
+                isLoading={false}
+                isError={true}
+            />,
+        );
 
         await waitFor(() =>
             expect(screen.getByText("Ошибка загрузки")).toBeInTheDocument(),
