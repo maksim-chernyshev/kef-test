@@ -19,8 +19,8 @@ const commentData = {
     updateLikes: () => {},
 };
 
-describe("Comment", () => {
-    test("Рендеринг компонента Comment с аватаром и данными автора", () => {
+describe("Рендер компонента", () => {
+    test("Рендер аватара и данные автора", () => {
         const {getByAltText, getByText} = render(<Comment {...commentData} />);
 
         const avatarImg = getByAltText(`Аватар ${commentData.authorData.name}`);

@@ -8,12 +8,11 @@ interface ICommentsHeaderProps {
         comments: number;
         likes: number;
     };
+    isLoading: boolean;
     isError: boolean;
 }
 
-const CommentsHeader = ({stats, isError}: ICommentsHeaderProps) => {
-    const isLoading = !stats.comments && !stats.likes;
-
+const CommentsHeader = ({stats, isError, isLoading}: ICommentsHeaderProps) => {
     return (
         <CommentHeaderStyled>
             <div className="comments">

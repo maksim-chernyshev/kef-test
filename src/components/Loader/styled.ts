@@ -4,9 +4,6 @@ export const LoaderStyled = styled.div`
     position: relative;
     width: 200px;
     height: 200px;
-    display: flex;
-    overflow: hidden;
-    background: transparent;
 
     .spinner {
         position: absolute;

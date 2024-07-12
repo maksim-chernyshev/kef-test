@@ -31,6 +31,7 @@ const Comments = () => {
     const [isLoadingMore, setIsLoadingMore] = useState(false);
     const [totalPages, setTotalPages] = useState(0);
     const [error, setError] = useState(false);
+    const [isStatsLoading, setIsStatsLoading] = useState(true);
     const [stats, setStats] = useState<IStats>({
         comments: 0,
         likes: 0,
@@ -66,10 +67,14 @@ const Comments = () => {
 
                     const likesOnPage = countLikes(pageData.comments);
 
-                    setStats((prevStats) => ({
-                        comments: prevStats.comments + pageData.comments.length,
-                        likes: prevStats.likes + likesOnPage,
-                    }));
+                    setStats((prevStats) => {
+                        setIsStatsLoading(false);
+                        return {
+                            comments:
+                                prevStats.comments + pageData.comments.length,
+                            likes: prevStats.likes + likesOnPage,
+                        };
+                    });
                 })
                 .catch((error) => {
                     setError(true);
@@ -133,26 +138,34 @@ const Comments = () => {
         [commentsOnPage],
     );
 
-    if (isLoading) {
-        return <Loader />;
-    }
+    const shouldRenderButton = currentPage < totalPages || isLoadingMore
 
     return (
         <>
-            <CommentsHeader stats={stats} isError={error} />
+            <CommentsHeader
+                stats={stats}
+                isError={error}
+                isLoading={isStatsLoading}
+            />
 
-            <CommentsStyled>
-                {renderCommentTree(commentsNestingTree)}
-            </CommentsStyled>
+            {isLoading ? (
+                <Loader />
+            ): (
+                <>
+                    <CommentsStyled>
+                        {renderCommentTree(commentsNestingTree)}
+                    </CommentsStyled>
 
-            {currentPage < totalPages && (
-                <button
-                    type="button"
-                    onClick={handleMoreComments}
-                    disabled={isLoadingMore}
-                >
-                    {isLoadingMore ? "Загрузка..." : "Загрузить еще"}
-                </button>
+                    {shouldRenderButton && (
+                        <button
+                            type="button"
+                            onClick={handleMoreComments}
+                            disabled={isLoadingMore}
+                        >
+                            {isLoadingMore ? "Загрузка..." : "Загрузить еще"}
+                        </button>
+                    )}
+                </>
             )}
         </>
     );

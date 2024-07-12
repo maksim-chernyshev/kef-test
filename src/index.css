@@ -33,7 +33,6 @@ button {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     max-width: 562px;
     min-height: 100dvh;
