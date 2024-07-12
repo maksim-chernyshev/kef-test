@@ -129,6 +129,7 @@ const Comments = () => {
 
     const handleMoreComments = useCallback(() => {
         setIsLoadingMore(true);
+        setIsStatsLoading(true)
         isPageDataFetched.current = false;
         setCurrentPage((prevPage) => prevPage + 1);
     }, []);
