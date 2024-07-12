@@ -1,6 +1,4 @@
-import {IComment} from "src/types/types";
-
-type CommentTreeType = Record<number, IComment[]>;
+import {CommentTreeType, IComment} from "src/types/types";
 
 export const buildCommentTree = (comments: IComment[]): CommentTreeType => {
     const commentTree: CommentTreeType = {};

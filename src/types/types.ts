@@ -1,10 +1,12 @@
 export interface ICommentsPage {
-    pagination: {
-        page: number;
-        size: number;
-        total_pages: number;
-    };
+    pagination: IPagePagination;
     data: IComment[];
+}
+
+export interface IPagePagination {
+    page: number;
+    size: number;
+    total_pages: number;
 }
 
 export interface IComment {
@@ -23,3 +25,5 @@ export interface IAuthor {
     name?: string;
     avatar?: string;
 }
+
+export type CommentTreeType = Record<number, IComment[]>;

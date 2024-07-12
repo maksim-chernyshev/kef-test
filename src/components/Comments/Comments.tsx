@@ -3,18 +3,20 @@ import React, {
     useCallback,
     useEffect,
     useMemo,
+    useRef,
     useState,
 } from "react";
 import Comment from "../Comment/Comment";
-import getCommentsRequest from "src/api/comments/getCommentsRequest";
 import getAuthorsRequest from "src/api/authors/getAuthorsRequest";
 import {CommentsStyled} from "./styled";
 import {formatDate} from "src/lib/formatDate";
 import CommentsHeader from "../CommentsHeader/CommentsHeader";
 import {buildCommentTree} from "src/lib/buildCommentTree";
 import {Loader} from "src/components/Loader/Loader";
-import {IAuthor, IComment, ICommentsPage} from "src/types/types";
-import {getCommentsStats} from "../../lib/getCommentsStats";
+import {IAuthor, IComment} from "src/types/types";
+import {getPageData} from "src/lib/getPageData";
+import {sortCommentsByTime} from "src/lib/sortCommentsByTime";
+import {countLikes} from "src/lib/countLikes";
 
 interface IStats {
     comments: number;
@@ -23,9 +25,7 @@ interface IStats {
 
 const Comments = () => {
     const [currentPage, setCurrentPage] = useState(1);
-    const [commentsByPage, setCommentsByPage] = useState<
-        Record<number, IComment[]>
-    >({});
+    const [commentsOnPage, setCommentsOnPage] = useState<IComment[]>([]);
     const [authors, setAuthors] = useState<IAuthor[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -36,44 +36,51 @@ const Comments = () => {
         likes: 0,
     });
 
-    const fetchData = useCallback(
-        async (page: number) => {
-            try {
-                const pageData: ICommentsPage = await getCommentsRequest(page);
-                setTotalPages(pageData.pagination.total_pages);
-                setCommentsByPage((prevCommentsByPage) => ({
-                    ...prevCommentsByPage,
-                    [page]: pageData.data,
-                }));
-
-                if (authors.length === 0) {
-                    const authorsData: IAuthor[] = await getAuthorsRequest();
-                    setAuthors(authorsData);
-                }
-
-                setIsLoading(false);
-                setIsLoadingMore(false);
-            } catch (error) {
-                console.error("Error fetching data: ", error);
-                setIsLoading(false);
-                setIsLoadingMore(false);
-            }
-        },
-        [authors.length],
-    );
+    const isPageDataFetched = useRef(false);
 
     useEffect(() => {
-        getCommentsStats(totalPages)
-            .then((fullStats) => {
-                setStats(() => ({
-                    comments: fullStats.comments,
-                    likes: fullStats.likes,
-                }));
-            })
-            .catch(() => setError(true));
+        getAuthorsRequest()
+            .then((authorsData) => setAuthors(authorsData))
+            .catch((error) => {
+                setError(true);
+                console.error("Ошибка загрузки авторов", error);
+            });
+    }, []);
 
-        fetchData(currentPage);
-    }, [currentPage, fetchData]);
+    useEffect(() => {
+        if (!isPageDataFetched.current) {
+            isPageDataFetched.current = true;
+
+            getPageData(currentPage)
+                .then((pageData) => {
+                    setTotalPages(pageData.pagination.total_pages);
+
+                    const sortedComments = sortCommentsByTime(
+                        pageData.comments,
+                    );
+
+                    setCommentsOnPage((prevComments) => [
+                        ...prevComments,
+                        ...sortedComments,
+                    ]);
+
+                    const likesOnPage = countLikes(pageData.comments);
+
+                    setStats((prevStats) => ({
+                        comments: prevStats.comments + pageData.comments.length,
+                        likes: prevStats.likes + likesOnPage,
+                    }));
+                })
+                .catch((error) => {
+                    setError(true);
+                    console.error("Ошибка загрузки данных страницы", error);
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                    setIsLoadingMore(false);
+                });
+        }
+    }, [currentPage]);
 
     const handleUpdateLikes = (increment: boolean) => {
         setStats((state) => ({
@@ -91,12 +98,6 @@ const Comments = () => {
                 return [];
             }
 
-            commentTree[parentId].sort(
-                (a, b) =>
-                    new Date(b.created).getTime() -
-                    new Date(a.created).getTime(),
-            );
-
             return commentTree[parentId].map((comment) => (
                 <Fragment key={comment.id}>
                     <Comment
@@ -111,7 +112,7 @@ const Comments = () => {
                     />
 
                     {commentTree[comment.id] && (
-                        <CommentsStyled>
+                        <CommentsStyled key={comment.id + "key"}>
                             {renderCommentTree(commentTree, comment.id)}
                         </CommentsStyled>
                     )}
@@ -123,15 +124,13 @@ const Comments = () => {
 
     const handleMoreComments = useCallback(() => {
         setIsLoadingMore(true);
+        isPageDataFetched.current = false;
         setCurrentPage((prevPage) => prevPage + 1);
     }, []);
 
-    const commentTreesByPage = useMemo(
-        () =>
-            Object.values(commentsByPage).map((comments) =>
-                buildCommentTree(comments),
-            ),
-        [commentsByPage],
+    const commentsNestingTree = useMemo(
+        () => buildCommentTree(commentsOnPage),
+        [commentsOnPage],
     );
 
     if (isLoading) {
@@ -142,11 +141,9 @@ const Comments = () => {
         <>
             <CommentsHeader stats={stats} isError={error} />
 
-            {commentTreesByPage.map((commentTree, index) => (
-                <CommentsStyled key={index}>
-                    {renderCommentTree(commentTree)}
-                </CommentsStyled>
-            ))}
+            <CommentsStyled>
+                {renderCommentTree(commentsNestingTree)}
+            </CommentsStyled>
 
             {currentPage < totalPages && (
                 <button

@@ -1,4 +1,4 @@
-import {memo, useState} from "react";
+import {memo} from "react";
 import {declensionComments} from "src/lib/declensionComments";
 import {CommentHeaderStyled} from "./styled";
 import allLikesImg from "src/assets/images/like-gray-filled.png";

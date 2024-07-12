@@ -1,5 +1,5 @@
 import {CommentStyled} from "./styled";
-import {memo, useCallback, useState} from "react";
+import {useCallback, useState} from "react";
 import defaultUser from "src/assets/images/default-user.jpg";
 import {IComment} from "src/types/types";
 import liked from "src/assets/images/like-red-filled.png";
@@ -56,4 +56,4 @@ const Comment = (props: IComment): JSX.Element => {
     );
 };
 
-export default memo(Comment);
+export default Comment;
