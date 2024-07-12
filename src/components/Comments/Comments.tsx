@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import Comment from "../Comment/Comment";
 import getAuthorsRequest from "src/api/authors/getAuthorsRequest";
-import {CommentsStyled} from "./styled";
+import {CommentsStyled, CommentsErrorStyled} from "./styled";
 import {formatDate} from "src/lib/formatDate";
 import CommentsHeader from "../CommentsHeader/CommentsHeader";
 import {buildCommentTree} from "src/lib/buildCommentTree";
@@ -27,11 +27,11 @@ const Comments = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [commentsOnPage, setCommentsOnPage] = useState<IComment[]>([]);
     const [authors, setAuthors] = useState<IAuthor[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isCommentsLoading, setIsCommentsLoading] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
+    const [isStatsLoading, setIsStatsLoading] = useState(true);
     const [totalPages, setTotalPages] = useState(0);
     const [error, setError] = useState(false);
-    const [isStatsLoading, setIsStatsLoading] = useState(true);
     const [stats, setStats] = useState<IStats>({
         comments: 0,
         likes: 0,
@@ -81,7 +81,7 @@ const Comments = () => {
                     console.error("Ошибка загрузки данных страницы", error);
                 })
                 .finally(() => {
-                    setIsLoading(false);
+                    setIsCommentsLoading(false);
                     setIsLoadingMore(false);
                 });
         }
@@ -138,7 +138,7 @@ const Comments = () => {
         [commentsOnPage],
     );
 
-    const shouldRenderButton = currentPage < totalPages || isLoadingMore
+    const shouldRenderButton = currentPage < totalPages || isLoadingMore;
 
     return (
         <>
@@ -148,9 +148,15 @@ const Comments = () => {
                 isLoading={isStatsLoading}
             />
 
-            {isLoading ? (
+            {isCommentsLoading ? (
                 <Loader />
-            ): (
+            ) : error ? (
+                <CommentsErrorStyled>
+                    Произошла ошибка загрузки.
+                    <br />
+                    Повторите попытку
+                </CommentsErrorStyled>
+            ) : (
                 <>
                     <CommentsStyled>
                         {renderCommentTree(commentsNestingTree)}
@@ -161,6 +167,7 @@ const Comments = () => {
                             type="button"
                             onClick={handleMoreComments}
                             disabled={isLoadingMore}
+                            data-testid="comments-more"
                         >
                             {isLoadingMore ? "Загрузка..." : "Загрузить еще"}
                         </button>

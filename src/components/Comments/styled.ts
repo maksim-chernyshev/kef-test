@@ -36,3 +36,10 @@ export const CommentsStyled = styled.ul`
         }
     }
 `;
+
+export const CommentsErrorStyled = styled.div`
+    display: flex;
+    font-size: 20px;
+    color: #f74a4a;
+    text-align: center;
+`;

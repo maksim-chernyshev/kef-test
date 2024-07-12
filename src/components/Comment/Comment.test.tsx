@@ -19,7 +19,7 @@ const commentData = {
     updateLikes: () => {},
 };
 
-describe("Рендер компонента", () => {
+describe("Компонент Comment", () => {
     test("Рендер аватара и данные автора", () => {
         const {getByAltText, getByText} = render(<Comment {...commentData} />);
 
