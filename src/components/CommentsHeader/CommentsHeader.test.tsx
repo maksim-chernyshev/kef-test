@@ -1,56 +1,36 @@
-import {getCommentsStats} from "src/lib/getCommentsStats";
-import {render, screen, waitFor} from "@testing-library/react";
+import {render} from "@testing-library/react";
 import CommentsHeader from "./CommentsHeader";
 
-jest.mock("../../lib/getCommentsStats", () => ({
-    getCommentsStats: jest.fn(),
-}));
-
-describe("Получение статистики", () => {
-    test("Получение кол-ва комментариев", async () => {
-        (getCommentsStats as jest.Mock).mockResolvedValue({comments: 29});
-
-        const data = await getCommentsStats(1);
-        expect(data.comments).toBe(29);
-    });
-
-    test("Получение кол-ва лайков", async () => {
-        (getCommentsStats as jest.Mock).mockResolvedValue({likes: 2344});
-
-        const data = await getCommentsStats(1);
-        expect(data.likes).toBe(2344);
-    });
-
-    test("Рендер текста загрузки", async () => {
-        render(
+describe("компонент CommentsHeader", () => {
+    it("Рендер загрузки", () => {
+        const {getByText} = render(
             <CommentsHeader stats={{comments: 0, likes: 0}} isError={false} />,
         );
 
-        expect(screen.getByText("Загрузка...")).toBeInTheDocument();
+        expect(getByText("Загрузка...")).toBeInTheDocument();
     });
 
-    test("Рендер компонента с данными", async () => {
-        render(
-            <CommentsHeader stats={{comments: 2, likes: 3}} isError={false} />,
-        );
-
-        await waitFor(() =>
-            expect(screen.getByText("2 комментария")).toBeInTheDocument(),
-        );
-        expect(screen.getByText("3")).toBeInTheDocument();
-    });
-
-    test("Рендер компонента с ошибкой", async () => {
-        (getCommentsStats as jest.Mock).mockRejectedValue(
-            new Error("Failed to fetch"),
-        );
-
-        render(
+    it("Рендер ошибки", () => {
+        const {getByText} = render(
             <CommentsHeader stats={{comments: 0, likes: 0}} isError={true} />,
         );
 
-        await waitFor(() =>
-            expect(screen.getByText("Ошибка загрузки")).toBeInTheDocument(),
+        expect(getByText("Ошибка загрузки")).toBeInTheDocument();
+    });
+
+    it("Рендер количества комментариев", () => {
+        const {getByText} = render(
+            <CommentsHeader stats={{comments: 5, likes: 10}} isError={false} />,
         );
+
+        expect(getByText("5 комментариев")).toBeInTheDocument();
+    });
+
+    it("Рендер количества лайков", () => {
+        const {getByText} = render(
+            <CommentsHeader stats={{comments: 5, likes: 10}} isError={false} />,
+        );
+
+        expect(getByText("10")).toBeInTheDocument();
     });
 });

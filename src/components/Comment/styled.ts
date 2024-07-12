@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const CommentStyled = styled.li`
+    display: grid;
     padding-bottom: 32px;
     color: #ffffff;
 
@@ -93,6 +94,7 @@ export const CommentStyled = styled.li`
 
     p {
         overflow-wrap: break-word;
+        min-width: 0;
         margin: 0;
         padding-left: 88px;
         font-size: var(--font-size);

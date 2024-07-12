@@ -6,7 +6,10 @@ interface IPageData {
     comments: IComment[];
 }
 
-export const getPageData = async (pageNumber: number, retryCount = 5): Promise<IPageData> => {
+export const getPageData = async (
+    pageNumber: number,
+    retryCount = 5,
+): Promise<IPageData> => {
     try {
         const pageInfo = await getCommentsRequest(pageNumber);
 
