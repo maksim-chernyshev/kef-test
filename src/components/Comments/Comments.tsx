@@ -106,11 +106,8 @@ const Comments = () => {
             return commentTree[parentId].map((comment) => (
                 <Fragment key={comment.id}>
                     <Comment
-                        id={comment.id}
                         created={formatDate(comment.created)}
                         text={comment.text}
-                        author={comment.author}
-                        parent={comment.parent}
                         likes={comment.likes}
                         authorData={authors[comment.author - 1]}
                         updateLikes={handleUpdateLikes}
