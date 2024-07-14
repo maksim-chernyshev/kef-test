@@ -17,6 +17,9 @@ import {IAuthor, IComment} from "src/types/types";
 import {getPageData} from "src/lib/getPageData";
 import {sortCommentsByTime} from "src/lib/sortCommentsByTime";
 import {countLikes} from "src/lib/countLikes";
+import {useQueryClient} from "@tanstack/react-query";
+import {usePageDataQuery} from "../../hooks/usePageDataQuery";
+import {useAuthorsQuery} from "../../hooks/useAuthorsQuery";
 
 interface IStats {
     comments: number;
@@ -24,74 +27,167 @@ interface IStats {
 }
 
 const Comments = () => {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [commentsOnPage, setCommentsOnPage] = useState<IComment[]>([]);
-    const [authors, setAuthors] = useState<IAuthor[]>([]);
-    const [isCommentsLoading, setIsCommentsLoading] = useState(true);
-    const [isLoadingMore, setIsLoadingMore] = useState(false);
-    const [isStatsLoading, setIsStatsLoading] = useState(true);
-    const [totalPages, setTotalPages] = useState(0);
+    // const [currentPage, setCurrentPage] = useState(1);
+    // const [commentsOnPage, setCommentsOnPage] = useState<IComment[]>([]);
+    // const [authors, setAuthors] = useState<IAuthor[]>([]);
+    // const [isCommentsLoading, setIsCommentsLoading] = useState(true);
+    // const [isLoadingMore, setIsLoadingMore] = useState(false);
+    // const [isStatsLoading, setIsStatsLoading] = useState(true);
+    // const [totalPages, setTotalPages] = useState(0);
     const [error, setError] = useState(false);
-    const [stats, setStats] = useState<IStats>({
+    // const [stats, setStats] = useState<IStats>({
+    //     comments: 0,
+    //     likes: 0,
+    // });
+
+    let currentPage: number = 1;
+    let totalPages: number = 0;
+    let authors: IAuthor[] = [];
+    let comments: IComment[] = [];
+    let stats: IStats = {
         comments: 0,
         likes: 0,
-    });
+    };
 
-    const isPageDataFetched = useRef(false);
+    const queryClient = useQueryClient();
 
-    useEffect(() => {
-        getAuthorsRequest()
-            .then((authorsData) => setAuthors(authorsData))
-            .catch((error) => {
-                setError(true);
-                console.error("Ошибка загрузки авторов", error);
-            });
-    }, []);
+    const {
+        data: authorsData,
+        isPending: isAuthorsLoading,
+        isError: isAuthorsError
+    } = useAuthorsQuery()
 
-    useEffect(() => {
-        if (!isPageDataFetched.current) {
-            isPageDataFetched.current = true;
+    const {
+        data: pageData,
+        isPending: isPageDataLoading,
+        isError: isPageDataError,
+        isFetchingNextPage,
+        fetchNextPage,
+        status,
+    } = usePageDataQuery();
 
-            getPageData(currentPage)
-                .then((pageData) => {
-                    setTotalPages(pageData.pagination.total_pages);
+    if (authorsData) {
+        authors = authorsData;
+    }
 
-                    const sortedComments = sortCommentsByTime(
-                        pageData.comments,
-                    );
+    if (pageData) {
+        currentPage = pageData.pageParams.length;
+        console.log(currentPage)
 
-                    setCommentsOnPage((prevComments) => [
-                        ...prevComments,
-                        ...sortedComments,
-                    ]);
 
-                    const likesOnPage = countLikes(pageData.comments);
+        totalPages = pageData.pages[0].pagination.total_pages;
 
-                    setStats((prevStats) => {
-                        setIsStatsLoading(false);
-                        return {
-                            comments:
-                                prevStats.comments + pageData.comments.length,
-                            likes: prevStats.likes + likesOnPage,
-                        };
-                    });
-                })
-                .catch((error) => {
-                    setError(true);
-                    console.error("Ошибка загрузки данных страницы", error);
-                })
-                .finally(() => {
-                    setIsCommentsLoading(false);
-                    setIsLoadingMore(false);
-                });
+        if (comments) {
+            comments = sortCommentsByTime(pageData.pages[currentPage - 1].data)
+            console.log(comments);
         }
-    }, [currentPage]);
+
+        const likesOnPage = countLikes(pageData.pages[currentPage - 1].data);
+
+        stats = {
+            comments: comments.length,
+            likes: likesOnPage,
+        }
+
+        // setStats((prevStats) => {
+        //     setIsStatsLoading(false)
+        //     return {
+        //         comments: prevStats.comments + pageData.pages[currentPage - 1].data.length,
+        //         likes: prevStats.likes + likesOnPage,
+        //     }
+        // })
+
+        // setCommentsOnPage((prevComments) => [
+        //     ...prevComments,
+        //     ...sortedComments,
+        // ]);
+    }
+
+    // console.log(pageData?.pages[currentPage].data)
+
+    // useEffect(() => {
+    //     if (authorsData) {
+    //         setAuthors(authorsData);
+    //     }
+    //
+    //     if (pageData) {
+    //         setTotalPages(pageData.pages[0].pagination.total_pages);
+    //
+    //         const sortedComments = sortCommentsByTime(
+    //             pageData.pages[currentPage].data,
+    //         );
+    //
+    //         setCommentsOnPage((prevComments) => [
+    //             ...prevComments,
+    //             ...sortedComments,
+    //         ]);
+    //
+    //         const likesOnPage = countLikes(pageData.pages[currentPage].data);
+    //
+    //         setStats((prevStats) => {
+    //             setIsStatsLoading(false)
+    //             return {
+    //                 comments: prevStats.comments + pageData.pages[currentPage].data.length,
+    //                 likes: prevStats.likes + likesOnPage,
+    //             }
+    //         })
+    //         setIsCommentsLoading(false)
+    //     }
+    // }, [])
+
+    // useEffect(() => {
+    //     getAuthorsRequest()
+    //         .then((authorsData) => setAuthors(authorsData))
+    //         .catch((error) => {
+    //             setError(true);
+    //             console.error("Ошибка загрузки авторов", error);
+    //         });
+    // }, []);
+
+    // useEffect(() => {
+    //     if (!isPageDataFetched.current) {
+    //         isPageDataFetched.current = true;
+    //
+    //         getPageData(currentPage)
+    //             .then((pageData) => {
+    //                 setTotalPages(pageData.pagination.total_pages);
+    //
+    //                 const sortedComments = sortCommentsByTime(
+    //                     pageData.comments,
+    //                 );
+    //
+    //                 setCommentsOnPage((prevComments) => [
+    //                     ...prevComments,
+    //                     ...sortedComments,
+    //                 ]);
+    //
+    //                 const likesOnPage = countLikes(pageData.comments);
+    //
+    //                 setStats((prevStats) => {
+    //                     setIsStatsLoading(false);
+    //                     return {
+    //                         comments:
+    //                             prevStats.comments + pageData.comments.length,
+    //                         likes: prevStats.likes + likesOnPage,
+    //                     };
+    //                 });
+    //             })
+    //             .catch((error) => {
+    //                 setError(true);
+    //                 console.error("Ошибка загрузки данных страницы", error);
+    //             })
+    //             .finally(() => {
+    //                 setIsCommentsLoading(false);
+    //                 setIsLoadingMore(false);
+    //             });
+    //     }
+    // }, [currentPage]);
 
     const handleUpdateLikes = (increment: boolean) => {
-        setStats((state) => ({
-            ...state,
-            likes: increment ? state.likes + 1 : state.likes - 1,
-        }));
+        // setStats((state) => ({
+        //     ...state,
+        //     likes: increment ? state.likes + 1 : state.likes - 1,
+        // }));
     };
 
     const renderCommentTree = useCallback(
@@ -106,11 +202,8 @@ const Comments = () => {
             return commentTree[parentId].map((comment) => (
                 <Fragment key={comment.id}>
                     <Comment
-                        id={comment.id}
                         created={formatDate(comment.created)}
                         text={comment.text}
-                        author={comment.author}
-                        parent={comment.parent}
                         likes={comment.likes}
                         authorData={authors[comment.author - 1]}
                         updateLikes={handleUpdateLikes}
@@ -128,30 +221,29 @@ const Comments = () => {
     );
 
     const handleMoreComments = useCallback(() => {
-        setIsLoadingMore(true);
-        setIsStatsLoading(true)
-        isPageDataFetched.current = false;
-        setCurrentPage((prevPage) => prevPage + 1);
+        // setIsLoadingMore(true);
+        // setIsStatsLoading(true)
+        // setCurrentPage((prevPage) => prevPage + 1);
     }, []);
 
     const commentsNestingTree = useMemo(
-        () => buildCommentTree(commentsOnPage),
-        [commentsOnPage],
+        () => buildCommentTree(comments),
+        [comments],
     );
 
-    const shouldRenderButton = currentPage < totalPages || isLoadingMore;
+    const shouldRenderButton = currentPage < totalPages || isFetchingNextPage;
 
     return (
         <>
             <CommentsHeader
                 stats={stats}
                 isError={error}
-                isLoading={isStatsLoading}
+                isLoading={isPageDataLoading}
             />
 
-            {isCommentsLoading ? (
+            {isPageDataLoading ? (
                 <Loader />
-            ) : error ? (
+            ) : isPageDataError ? (
                 <CommentsErrorStyled>
                     Произошла ошибка загрузки.
                     <br />
@@ -166,11 +258,11 @@ const Comments = () => {
                     {shouldRenderButton && (
                         <button
                             type="button"
-                            onClick={handleMoreComments}
-                            disabled={isLoadingMore}
+                            onClick={() => fetchNextPage()}
+                            disabled={isFetchingNextPage}
                             data-testid="comments-more"
                         >
-                            {isLoadingMore ? "Загрузка..." : "Загрузить еще"}
+                            {isFetchingNextPage ? "Загрузка..." : "Загрузить еще"}
                         </button>
                     )}
                 </>
