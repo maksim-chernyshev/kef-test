@@ -63,7 +63,7 @@ describe("Компонент Comments", () => {
         jest.clearAllMocks();
     });
 
-    test("Рендер списка компонентов", async () => {
+    test("Рендер списка комментариев", async () => {
         render(<Comments />);
 
         await waitFor(() => {

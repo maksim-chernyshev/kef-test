@@ -2,7 +2,7 @@ import {render} from "@testing-library/react";
 import CommentsHeader from "./CommentsHeader";
 
 describe("Компонент CommentsHeader", () => {
-    it("Рендер загрузки", () => {
+    test("Рендер загрузки", () => {
         const {getByText} = render(
             <CommentsHeader
                 stats={{comments: 0, likes: 0}}
@@ -14,7 +14,7 @@ describe("Компонент CommentsHeader", () => {
         expect(getByText("Загрузка...")).toBeInTheDocument();
     });
 
-    it("Рендер ошибки", () => {
+    test("Рендер ошибки", () => {
         const {getByText} = render(
             <CommentsHeader
                 stats={{comments: 0, likes: 0}}
@@ -26,7 +26,7 @@ describe("Компонент CommentsHeader", () => {
         expect(getByText("Ошибка загрузки")).toBeInTheDocument();
     });
 
-    it("Рендер количества комментариев", () => {
+    test("Рендер количества комментариев", () => {
         const {getByText} = render(
             <CommentsHeader
                 stats={{comments: 5, likes: 10}}
@@ -38,7 +38,7 @@ describe("Компонент CommentsHeader", () => {
         expect(getByText("5 комментариев")).toBeInTheDocument();
     });
 
-    it("Рендер количества лайков", () => {
+    test("Рендер количества лайков", () => {
         const {getByText} = render(
             <CommentsHeader
                 stats={{comments: 5, likes: 10}}
