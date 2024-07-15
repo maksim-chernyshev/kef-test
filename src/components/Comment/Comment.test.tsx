@@ -1,4 +1,4 @@
-import {fireEvent, render} from "@testing-library/react";
+import {fireEvent, getByTestId, queryByTestId, render} from "@testing-library/react";
 import Comment from "./Comment";
 import {IComment} from "../../types/types";
 
@@ -21,9 +21,10 @@ const commentData = {
 
 describe("Компонент Comment", () => {
     test("Рендер аватара и данные автора", () => {
-        const {getByAltText, getByText} = render(<Comment {...commentData} />);
+        const {getByText, getByTestId} = render(<Comment {...commentData} />);
 
-        const avatarImg = getByAltText(`Аватар ${commentData.authorData.name}`);
+        const avatarImg = getByTestId('avatar');
+
         expect(avatarImg).toBeInTheDocument();
         expect(avatarImg.getAttribute("src")).toBe(
             commentData.authorData.avatar,
@@ -43,22 +44,18 @@ describe("Компонент Comment", () => {
     });
 
     test("Обработка клика на кнопку лайка", () => {
-        const {getByAltText, getByText} = render(<Comment {...commentData} />);
+        const {getByTestId, getByAltText, getByText} = render(<Comment {...commentData} />);
 
-        const likeButton = getByAltText("Поставить лайк").parentElement;
+        const likeButton = getByTestId('like-button');
 
-        if (likeButton) {
-            fireEvent.click(likeButton);
-        }
+        fireEvent.click(likeButton);
 
         const likesCounterUpdated = getByText(
             (commentData.likes + 1).toString(),
         );
         expect(likesCounterUpdated).toBeInTheDocument();
 
-        if (likeButton) {
-            fireEvent.click(likeButton);
-        }
+        fireEvent.click(likeButton);
 
         const likesCounterOriginal = getByText(commentData.likes.toString());
         expect(likesCounterOriginal).toBeInTheDocument();

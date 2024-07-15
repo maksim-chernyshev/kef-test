@@ -34,6 +34,7 @@ const Comment = (props: CommentPropsType): JSX.Element => {
                     alt={`Аватар ${
                         authorData.name || "пользователя не найден"
                     }`}
+                    data-testid="avatar"
                 />
 
                 <div className="author-name">{`${
@@ -43,13 +44,22 @@ const Comment = (props: CommentPropsType): JSX.Element => {
                 <time className="comment-created">{created}</time>
 
                 <div className="comment-likes">
-                    <button className="like-button" onClick={handleClick}>
+                    <button
+                        className="like-button"
+                        onClick={handleClick}
+                        data-testid="like-button"
+                    >
                         <img
                             src={isLiked ? liked : notLiked}
                             alt={isLiked ? "Снять лайк" : "Поставить лайк"}
                         />
                     </button>
-                    <span className="likes-counter">{commentLikes}</span>
+                    <span
+                        className="likes-counter"
+                        data-testid="likes-counter"
+                    >
+                        {commentLikes}
+                    </span>
                 </div>
             </header>
 
