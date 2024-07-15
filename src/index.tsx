@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import useMockAdapter from "src/api/useMockAdapter";
 import "./index.css";
 import App from "./App";
+import ErrorBoundary from "src/components/ErrorBoundary/ErrorBoundary";
 
 const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement,
@@ -16,6 +17,8 @@ const RootApp = () => {
 
 root.render(
     <React.StrictMode>
-        <RootApp />
+        <ErrorBoundary>
+            <RootApp />
+        </ErrorBoundary>
     </React.StrictMode>,
 );

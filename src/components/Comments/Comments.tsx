@@ -17,6 +17,7 @@ import {IAuthor, IComment} from "src/types/types";
 import {getPageData} from "src/lib/getPageData";
 import {sortCommentsByTime} from "src/lib/sortCommentsByTime";
 import {countLikes} from "src/lib/countLikes";
+import Button from "src/components/Button/Button";
 
 interface IStats {
     comments: number;
@@ -87,12 +88,12 @@ const Comments = () => {
         }
     }, [currentPage]);
 
-    const handleUpdateLikes = (increment: boolean) => {
+    const handleUpdateLikes = useCallback((increment: boolean) => {
         setStats((state) => ({
             ...state,
             likes: increment ? state.likes + 1 : state.likes - 1,
         }));
-    };
+    }, []);
 
     const renderCommentTree = useCallback(
         (
@@ -126,7 +127,7 @@ const Comments = () => {
 
     const handleMoreComments = useCallback(() => {
         setIsLoadingMore(true);
-        setIsStatsLoading(true)
+        setIsStatsLoading(true);
         isPageDataFetched.current = false;
         setCurrentPage((prevPage) => prevPage + 1);
     }, []);
@@ -161,14 +162,14 @@ const Comments = () => {
                     </CommentsStyled>
 
                     {shouldRenderButton && (
-                        <button
+                        <Button
                             type="button"
                             onClick={handleMoreComments}
                             disabled={isLoadingMore}
                             data-testid="comments-more"
                         >
                             {isLoadingMore ? "Загрузка..." : "Загрузить еще"}
-                        </button>
+                        </Button>
                     )}
                 </>
             )}

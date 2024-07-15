@@ -5,16 +5,10 @@ import {IComment} from "src/types/types";
 import liked from "src/assets/images/like-red-filled.png";
 import notLiked from "src/assets/images/like-red-unfilled.png";
 
-type CommentPropsType  = Omit<IComment, 'id' | 'author' | 'parent'>
+type CommentPropsType = Omit<IComment, "id" | "author" | "parent">;
 
 const Comment = (props: CommentPropsType): JSX.Element => {
-    const {
-        created,
-        text,
-        likes,
-        authorData,
-        updateLikes
-    } = props;
+    const {created, text, likes, authorData, updateLikes} = props;
 
     const [isLiked, setIsLiked] = useState(false);
     const [commentLikes, setCommentLikes] = useState(likes);
@@ -46,7 +40,7 @@ const Comment = (props: CommentPropsType): JSX.Element => {
                     authorData.name || "Пользователь не найден"
                 }`}</div>
 
-                <div className="comment-created">{created}</div>
+                <time className="comment-created">{created}</time>
 
                 <div className="comment-likes">
                     <button className="like-button" onClick={handleClick}>

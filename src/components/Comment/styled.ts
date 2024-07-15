@@ -39,6 +39,8 @@ export const CommentStyled = styled.li`
 
     .author-name {
         align-self: end;
+        overflow-wrap: break-word;
+        min-width: 0;
         font-size: var(--font-size);
         line-height: 22px;
         font-weight: 700;
