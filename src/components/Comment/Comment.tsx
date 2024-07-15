@@ -54,10 +54,7 @@ const Comment = (props: CommentPropsType): JSX.Element => {
                             alt={isLiked ? "Снять лайк" : "Поставить лайк"}
                         />
                     </button>
-                    <span
-                        className="likes-counter"
-                        data-testid="likes-counter"
-                    >
+                    <span className="likes-counter" data-testid="likes-counter">
                         {commentLikes}
                     </span>
                 </div>

@@ -1,4 +1,7 @@
-import {fireEvent, getByTestId, queryByTestId, render} from "@testing-library/react";
+import {
+    fireEvent,
+    render,
+} from "@testing-library/react";
 import Comment from "./Comment";
 import {IComment} from "../../types/types";
 
@@ -23,7 +26,7 @@ describe("Компонент Comment", () => {
     test("Рендер аватара и данные автора", () => {
         const {getByText, getByTestId} = render(<Comment {...commentData} />);
 
-        const avatarImg = getByTestId('avatar');
+        const avatarImg = getByTestId("avatar");
 
         expect(avatarImg).toBeInTheDocument();
         expect(avatarImg.getAttribute("src")).toBe(
@@ -44,9 +47,11 @@ describe("Компонент Comment", () => {
     });
 
     test("Обработка клика на кнопку лайка", () => {
-        const {getByTestId, getByAltText, getByText} = render(<Comment {...commentData} />);
+        const {getByTestId, getByText} = render(
+            <Comment {...commentData} />,
+        );
 
-        const likeButton = getByTestId('like-button');
+        const likeButton = getByTestId("like-button");
 
         fireEvent.click(likeButton);
 
