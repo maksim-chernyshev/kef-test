@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/kef-test/static/css/main.efce6e95.css",
-    "main.js": "/kef-test/static/js/main.1c177b2a.js",
+    "main.js": "/kef-test/static/js/main.6f482dbc.js",
     "static/media/background-desktop.webp": "/kef-test/static/media/background-desktop.51dda55826a40a00fa64.webp",
     "static/media/han-solo.jpg": "/kef-test/static/media/han-solo.84705bac66e252072c67.jpg",
     "index.html": "/kef-test/index.html",
     "main.efce6e95.css.map": "/kef-test/static/css/main.efce6e95.css.map",
-    "main.1c177b2a.js.map": "/kef-test/static/js/main.1c177b2a.js.map"
+    "main.6f482dbc.js.map": "/kef-test/static/js/main.6f482dbc.js.map"
   },
   "entrypoints": [
     "static/css/main.efce6e95.css",
-    "static/js/main.1c177b2a.js"
+    "static/js/main.6f482dbc.js"
   ]
 }
