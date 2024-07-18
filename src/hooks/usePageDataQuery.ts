@@ -5,7 +5,7 @@ import getCommentsRequest from "../api/comments/getCommentsRequest";
 export const usePageDataQuery = () => {
     return useInfiniteQuery<ICommentsPage, number>({
         queryKey: ["pageData"],
-        queryFn: ({pageParam}: any) => getCommentsRequest(pageParam),
+        queryFn: ({pageParam}) => getCommentsRequest(pageParam as number),
         initialPageParam: 1,
         getNextPageParam: (lastPage, allPages) => {
             if (allPages.length !== lastPage.pagination.total_pages) {
