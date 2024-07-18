@@ -4,7 +4,7 @@ import getAuthorsRequest from "../api/authors/getAuthorsRequest";
 
 export const useAuthorsQuery = () => {
     return useQuery<IAuthor[]>({
-        queryKey: ['authors'],
+        queryKey: ["authors"],
         queryFn: getAuthorsRequest,
-    })
-}
+    });
+};

@@ -12,6 +12,7 @@
         "prettier": "prettier --write '*/**/*.{ts,tsx,js,jsx,css,scss,json}'"
     },
     "devDependencies": {
+        "@tanstack/react-query-devtools": "^5.51.4",
         "jest": "^27.5.1"
     },
     "dependencies": {
